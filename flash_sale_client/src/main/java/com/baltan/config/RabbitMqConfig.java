@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMqConfig {
+    @Value("${rabbitmq.ticket-queue.name}")
+    private String ticketRequestQueueName;
+    @Value(("${rabbitmq.ticket-exchanger.name}"))
+    private String ticketRequestExchangerName;
+    @Value("${rabbitmq.ticket-route-key}")
+    private String ticketRequestRouteKey;
+
     /**
      * 创建一个队列
      *
@@ -22,7 +30,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public Queue ticketQueue() {
-        return new Queue("ticketQueue");
+        return new Queue(ticketRequestQueueName);
     }
 
     /**
@@ -32,7 +40,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public TopicExchange ticketExchanger() {
-        return new TopicExchange("ticketExchanger");
+        return new TopicExchange(ticketRequestExchangerName);
     }
 
     /**
@@ -44,6 +52,30 @@ public class RabbitMqConfig {
      */
     @Bean
     Binding bindTicketQueue2TicketExchanger(Queue ticketQueue, TopicExchange ticketExchanger) {
-        return BindingBuilder.bind(ticketQueue).to(ticketExchanger).with("ticket.routeKey");
+        return BindingBuilder.bind(ticketQueue).to(ticketExchanger).with(ticketRequestRouteKey);
+    }
+
+    public String getTicketRequestQueueName() {
+        return ticketRequestQueueName;
+    }
+
+    public void setTicketRequestQueueName(String ticketRequestQueueName) {
+        this.ticketRequestQueueName = ticketRequestQueueName;
+    }
+
+    public String getTicketRequestExchangerName() {
+        return ticketRequestExchangerName;
+    }
+
+    public void setTicketRequestExchangerName(String ticketRequestExchangerName) {
+        this.ticketRequestExchangerName = ticketRequestExchangerName;
+    }
+
+    public String getTicketRequestRouteKey() {
+        return ticketRequestRouteKey;
+    }
+
+    public void setTicketRequestRouteKey(String ticketRequestRouteKey) {
+        this.ticketRequestRouteKey = ticketRequestRouteKey;
     }
 }
