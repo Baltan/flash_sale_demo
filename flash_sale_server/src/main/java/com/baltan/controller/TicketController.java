@@ -19,11 +19,24 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
+    /**
+     * 购买一张火车票
+     *
+     * @param map
+     * @return
+     */
     @PostMapping("/buyTicket")
     public String buyTicket(@RequestBody Map<String, Object> map) {
         return ticketService.buyTicket(map);
     }
 
+    /**
+     * 查询所有余票
+     *
+     * @param from
+     * @param to
+     * @return
+     */
     @GetMapping("/queryAllAvailableTickets")
     public List<Ticket> queryAllAvailableTickets(@RequestParam String from, @RequestParam String to) {
         List<Ticket> availableTicketList = ticketService.queryAllAvailableTickets(from, to);

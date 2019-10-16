@@ -1,10 +1,12 @@
 package com.baltan.service;
 
+import com.baltan.config.MyBatisSqlSessionFactory;
 import com.baltan.entity.Ticket;
 import com.baltan.mapper.TicketMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,20 +18,39 @@ import java.util.Map;
  */
 @Component
 public class TicketService {
-    @Autowired
-    private TicketMapper ticketMapper;
-
     public String buyTicket(Map<String, Object> map) {
-        int ticketCount = ticketMapper.buyTicket(map);
+        SqlSession sqlSession = MyBatisSqlSessionFactory.openSqlSession();
+        int ticketCount;
+        String response = "购票失败！";
 
-        if (ticketCount == 1) {
-            return "购票成功！";
-        } else {
-            return "购票失败！";
+        try {
+            TicketMapper mapper = sqlSession.getMapper(TicketMapper.class);
+            ticketCount = mapper.buyTicket(map);
+
+            if (ticketCount == 1) {
+                sqlSession.commit();
+                response = "购票成功！";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
         }
+        return response;
     }
 
     public List<Ticket> queryAllAvailableTickets(String from, String to) {
-        return ticketMapper.queryAllAvailableTickets(from, to);
+        SqlSession sqlSession = MyBatisSqlSessionFactory.openSqlSession();
+        List<Ticket> availableTicketList = Collections.emptyList();
+
+        try {
+            TicketMapper mapper = sqlSession.getMapper(TicketMapper.class);
+            availableTicketList = mapper.queryAllAvailableTickets(from, to);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
+        return availableTicketList;
     }
 }
