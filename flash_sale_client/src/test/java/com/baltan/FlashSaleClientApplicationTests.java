@@ -49,6 +49,7 @@ public class FlashSaleClientApplicationTests {
             Ticket ticket = availableTicketList.get(ticketNo);
 
             final int j = i;
+
             Map<String, Object> saleMap = new HashMap<>();
 
             saleMap.put("from", from);
@@ -70,7 +71,7 @@ public class FlashSaleClientApplicationTests {
                 System.out.println("用户" + j + "开始抢票");
                 String response = restTemplate.postForObject(url + "buyTicket", saleMap, String.class);
                 System.out.println("用户" + j + " ： " + response);
-            }).start();
+            }, "用户" + j + "Thread").start();
         }
     }
 }
