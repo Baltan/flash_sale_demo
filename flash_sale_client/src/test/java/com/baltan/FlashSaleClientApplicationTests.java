@@ -31,12 +31,14 @@ public class FlashSaleClientApplicationTests {
     private Random random = new Random();
 
     @Test
-    public void testBuyTicket() {
+    public void testBuyTicketWithoutMQ() {
         for (int i = 1; i <= concurrentCount; i++) {
             ParameterizedTypeReference<List<Ticket>> typeReference =
                     new ParameterizedTypeReference<List<Ticket>>() {
                     };
-
+            /**
+             * 查询所有余票
+             */
             ResponseEntity<List<Ticket>> responseEntity =
                     restTemplate.exchange(url + "queryAvailableAllTickets" + "?from=" + from + "&to=" + to,
                             HttpMethod.GET, new HttpEntity<>(Ticket.class), typeReference);
@@ -62,7 +64,9 @@ public class FlashSaleClientApplicationTests {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                /**
+                 * 随机购买一张车票
+                 */
                 String response = restTemplate.postForObject(url + "buyTicket", saleMap, String.class);
                 System.out.println("用户" + j + " ： " + response);
             }).start();
