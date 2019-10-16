@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -70,5 +72,35 @@ public class FlashSaleServerApplicationTests {
         String to = "上海虹桥站";
         List<Ticket> ticketList = ticketMapper.queryAllAvailableTickets(from, to);
         System.out.println(ticketList);
+    }
+
+    @Test
+    public void testBuyTicket() {
+        String from = "杭州东站";
+        String to = "上海虹桥站";
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("from", from);
+        map.put("to", to);
+        map.put("coachNo", "01");
+        map.put("seatNo", "01A");
+        map.put("username", "张三");
+        map.put("userId", "111111111111111111");
+
+        SqlSession sqlSession = MyBatisSqlSessionFactory.openSqlSession();
+
+        try {
+            TicketMapper mapper = sqlSession.getMapper(TicketMapper.class);
+            int effectiveLineCount = mapper.buyTicket(map);
+            System.out.println(effectiveLineCount);
+
+            if (effectiveLineCount == 1) {
+                sqlSession.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
     }
 }
