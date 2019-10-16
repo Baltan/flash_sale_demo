@@ -6,7 +6,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +18,10 @@ import java.util.List;
 public class httpConfig {
     @Bean
     public RestTemplate restTemplate() {
-        List<HttpMessageConverter<?>> converterList = new ArrayList<>();
-        HttpMessageConverter<?> converter = new MappingJackson2HttpMessageConverter();
-        converterList.add(converter);
-        RestTemplate restTemplate = new RestTemplate(converterList);
+        RestTemplate restTemplate = new RestTemplate();
+        List<HttpMessageConverter<?>> converterList = restTemplate.getMessageConverters();
+        converterList.add(new MappingJackson2HttpMessageConverter());
+        restTemplate.setMessageConverters(converterList);
         return restTemplate;
     }
 }
