@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="application.properties"></properties>
+
+    <typeAliases>
+        <!-- MyBatis 会扫描包底下所有的 JavaBean，并为每个 JavaBean 注册一个以小写字母开头的别名 -->
+        <package name="entity"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!-- 配置数据源 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${spring.datasource.driver-class-name}"/>
+                <property name="url" value="${spring.datasource.url}"/>
+                <property name="username" value="${spring.datasource.username}"/>
+                <property name="password" value="${spring.datasource.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- mapper 对应的 xml 配置文件 -->
+    <mappers>
+        <mapper resource="com/baltan/mapper/TicketMapper.xml"/>
+        <!--        <mapper class="com.baltan.mapper.TicketMapper"/>-->
+    </mappers>
+</configuration>
