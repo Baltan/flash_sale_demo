@@ -4,6 +4,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,13 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class RabbitMqConfig {
+    @Value("${rabbitmq.ticket-queue.name}")
+    private String ticketResponseQueueName;
+    @Value(("${rabbitmq.ticket-exchanger.name}"))
+    private String ticketResponseExchangerName;
+    @Value("${rabbitmq.ticket-route-key}")
+    private String ticketResponseRouteKey;
+
     /**
      * 创建一个队列
      *
@@ -22,7 +30,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public Queue ticketQueue() {
-        return new Queue("ticketQueue");
+        return new Queue(ticketResponseQueueName);
     }
 
     /**
@@ -32,7 +40,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public TopicExchange ticketExchanger() {
-        return new TopicExchange("ticketExchanger");
+        return new TopicExchange(ticketResponseExchangerName);
     }
 
     /**
@@ -44,6 +52,30 @@ public class RabbitMqConfig {
      */
     @Bean
     Binding bindTicketQueue2TicketExchanger(Queue ticketQueue, TopicExchange ticketExchanger) {
-        return BindingBuilder.bind(ticketQueue).to(ticketExchanger).with("ticket.routeKey");
+        return BindingBuilder.bind(ticketQueue).to(ticketExchanger).with(ticketResponseRouteKey);
+    }
+
+    public String getTicketResponseQueueName() {
+        return ticketResponseQueueName;
+    }
+
+    public void setTicketResponseQueueName(String ticketResponseQueueName) {
+        this.ticketResponseQueueName = ticketResponseQueueName;
+    }
+
+    public String getTicketResponseExchangerName() {
+        return ticketResponseExchangerName;
+    }
+
+    public void setTicketResponseExchangerName(String ticketResponseExchangerName) {
+        this.ticketResponseExchangerName = ticketResponseExchangerName;
+    }
+
+    public String getTicketResponseRouteKey() {
+        return ticketResponseRouteKey;
+    }
+
+    public void setTicketResponseRouteKey(String ticketResponseRouteKey) {
+        this.ticketResponseRouteKey = ticketResponseRouteKey;
     }
 }
