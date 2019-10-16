@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.baltan.mapper.TicketMapper">
+
+    <resultMap id="ticket" type="com.baltan.entity.Ticket">
+        <id property="id" column="id"/>
+        <result property="from" column="from"/>
+        <result property="to" column="to"/>
+        <result property="username" column="username"/>
+        <result property="userId" column="userId"/>
+        <result property="price" column="price"/>
+        <result property="coachNo" column="coachNo"/>
+        <result property="seatNo" column="seatNo"/>
+    </resultMap>
+
+    <insert id="insertTickets" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into `ticket`(`from`,`to`,`price`,`coachNo`,`seatNo`,`sold`) values
+        <foreach collection="list" item="ticket" separator=",">
+            (#{ticket.from},#{ticket.to},#{ticket.price},#{ticket.coachNo},#{ticket.seatNo},0)
+        </foreach>
+    </insert>
+
+    <update id="buyTicket" parameterType="java.util.HashMap">
+        update `ticket`
+        set `username`=#{username},
+            `userId`=#{userId},
+            `sold`=1
+        where `from` = #{from}
+          and `to` = #{to}
+          and `coachNo` = #{coachNo}
+          and `seatNo` = #{seatNo}
+          and `sold` = 0
+    </update>
+
+    <select id="queryAvailableAllTickets" parameterType="String" resultMap="ticket">
+        select `id`, `from`, `to`, `price`, `coachNo`, `seatNo`
+        from `ticket`
+        where `from` = #{from}
+          and `to` = #{to}
+          and `sold` = 0
+    </select>
+</mapper>
