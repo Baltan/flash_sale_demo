@@ -68,7 +68,7 @@ public class FlashSaleServerApplicationTests {
     public void testQueryAvailableAllTickets() {
         String from = "杭州东站";
         String to = "上海虹桥站";
-        List<Ticket> ticketList = ticketMapper.queryAvailableAllTickets(from, to);
+        List<Ticket> ticketList = ticketMapper.queryAllAvailableTickets(from, to);
         System.out.println(ticketList);
     }
 }

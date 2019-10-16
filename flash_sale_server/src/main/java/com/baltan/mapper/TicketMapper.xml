@@ -34,7 +34,7 @@
           and `sold` = 0
     </update>
 
-    <select id="queryAvailableAllTickets" parameterType="String" resultMap="ticket">
+    <select id="queryAllAvailableTickets" parameterType="String" resultMap="ticket">
         select `id`, `from`, `to`, `price`, `coachNo`, `seatNo`
         from `ticket`
         where `from` = #{from}

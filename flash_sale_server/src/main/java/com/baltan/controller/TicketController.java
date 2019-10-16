@@ -24,9 +24,9 @@ public class TicketController {
         return ticketService.buyTicket(map);
     }
 
-    @GetMapping("/queryAvailableAllTickets")
-    public List<Ticket> queryAvailableAllTickets(@RequestParam String from, @RequestParam String to) {
-        List<Ticket> availableTicketList = ticketService.queryAvailableAllTickets(from, to);
+    @GetMapping("/queryAllAvailableTickets")
+    public List<Ticket> queryAllAvailableTickets(@RequestParam String from, @RequestParam String to) {
+        List<Ticket> availableTicketList = ticketService.queryAllAvailableTickets(from, to);
         return availableTicketList;
     }
 }

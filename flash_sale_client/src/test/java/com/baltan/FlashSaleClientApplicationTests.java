@@ -40,7 +40,7 @@ public class FlashSaleClientApplicationTests {
              * 查询所有余票
              */
             ResponseEntity<List<Ticket>> responseEntity =
-                    restTemplate.exchange(url + "queryAvailableAllTickets" + "?from=" + from + "&to=" + to,
+                    restTemplate.exchange(url + "queryAllAvailableTickets" + "?from=" + from + "&to=" + to,
                             HttpMethod.GET, new HttpEntity<>(Ticket.class), typeReference);
             List<Ticket> availableTicketList = responseEntity.getBody();
             int ticketCount = availableTicketList.size();
@@ -67,6 +67,7 @@ public class FlashSaleClientApplicationTests {
                 /**
                  * 随机购买一张车票
                  */
+                System.out.println("用户" + j + "开始抢票");
                 String response = restTemplate.postForObject(url + "buyTicket", saleMap, String.class);
                 System.out.println("用户" + j + " ： " + response);
             }).start();

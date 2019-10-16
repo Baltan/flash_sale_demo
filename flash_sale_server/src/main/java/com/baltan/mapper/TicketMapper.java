@@ -45,5 +45,5 @@ public interface TicketMapper {
      * @param to
      * @return
      */
-    List<Ticket> queryAvailableAllTickets(String from, String to);
+    List<Ticket> queryAllAvailableTickets(String from, String to);
 }

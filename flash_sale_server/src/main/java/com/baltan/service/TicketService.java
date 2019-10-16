@@ -29,7 +29,7 @@ public class TicketService {
         }
     }
 
-    public List<Ticket> queryAvailableAllTickets(String from, String to) {
-        return ticketMapper.queryAvailableAllTickets(from, to);
+    public List<Ticket> queryAllAvailableTickets(String from, String to) {
+        return ticketMapper.queryAllAvailableTickets(from, to);
     }
 }
