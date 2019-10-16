@@ -1,6 +1,6 @@
 package com.baltan.util;
 
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitMqUtil {
     @Autowired
-    private AmqpTemplate amqpTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     public void send(String exchanger, String routeKey, Object message) {
-        amqpTemplate.convertAndSend(exchanger, routeKey, message);
+        rabbitTemplate.convertAndSend(exchanger, routeKey, message);
     }
 }
