@@ -3,6 +3,8 @@ package com.baltan;
 import com.baltan.config.RabbitMqConfig;
 import com.baltan.entity.Ticket;
 import com.baltan.util.RabbitMqUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class FlashSaleClientApplicationTests {
     private String from = "杭州东站";
     private String to = "上海虹桥站";
     private Random random = new Random();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testBuyTicketWithoutMQ() {
@@ -82,7 +85,7 @@ public class FlashSaleClientApplicationTests {
     }
 
     @Test
-    public void testBuyTicketWithMQ() {
+    public void testBuyTicketWithMQ() throws JsonProcessingException {
         for (int i = 1; i <= concurrentCount; i++) {
             ParameterizedTypeReference<List<Ticket>> typeReference =
                     new ParameterizedTypeReference<List<Ticket>>() {
@@ -112,6 +115,7 @@ public class FlashSaleClientApplicationTests {
 
             String exchanger = rabbitMqConfig.getTicketRequestExchangerName();
             String routeKey = rabbitMqConfig.getTicketRequestRouteKey();
+            String message = objectMapper.writeValueAsString(saleMap);
 
             new Thread(() -> {
                 try {
@@ -123,7 +127,7 @@ public class FlashSaleClientApplicationTests {
                  * 随机购买一张车票
                  */
                 System.out.println("用户" + j + "开始抢票");
-                rabbitMqUtil.send(exchanger, routeKey, saleMap);
+                rabbitMqUtil.send(exchanger, routeKey, message);
             }, "用户" + j + "Thread").start();
         }
     }
