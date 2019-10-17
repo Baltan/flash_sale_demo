@@ -12,10 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TicketBusiness {
     @RabbitListener(queues = "ticket.response.queue")
-    public void buyTicket(Object message) {
-        if (message instanceof String) {
-            String response = (String) message;
-            System.out.println(response);
-        }
+    public void buyTicket(String message) {
+        System.out.println(message);
     }
 }
