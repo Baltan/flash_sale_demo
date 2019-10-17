@@ -15,7 +15,7 @@ public class RabbitMqUtil {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void send(String exchanger, String routeKey, Object message) {
+    public void send(String exchanger, String routeKey, String message) {
         rabbitTemplate.convertAndSend(exchanger, routeKey, message);
     }
 }
