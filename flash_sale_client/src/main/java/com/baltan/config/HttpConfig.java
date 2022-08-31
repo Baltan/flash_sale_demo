@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2019-10-15 20:14
  */
 @Configuration
-public class httpConfig {
+public class HttpConfig {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
